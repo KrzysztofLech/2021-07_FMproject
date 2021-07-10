@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ItemTableViewCell: UITableViewCell {
     
@@ -33,7 +34,11 @@ final class ItemTableViewCell: UITableViewCell {
     }
     
     func configure(withData data: DataViewModel) {
-        itemImageView.image = nil   ///
+        itemImageView.image = nil
+        if let url = URL(string: data.imageUrl) {
+            itemImageView.kf.indicatorType = .activity
+            itemImageView.kf.setImage(with: url)
+        }
         
         titleLabel.text = data.title
         descriptionLabel.text = data.description
