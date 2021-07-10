@@ -15,7 +15,9 @@ final class MainPageViewModel {
         self.dataService = dataService
     }
     
-    var data: [DataModel] {
-        return dataService.data.sorted { $0.orderId < $01.orderId }
+    var data: [DataViewModel] {
+        return dataService.data
+            .sorted { $0.orderId < $01.orderId }
+            .map { DataViewModel(data: $0) }
     }
 }
