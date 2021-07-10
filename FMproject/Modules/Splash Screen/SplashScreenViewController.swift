@@ -32,20 +32,24 @@ final class SplashScreenViewController: UIViewController {
     }
     
     private func fetchData() {
-        dataService.getData { [weak self] success in
-            self?.downloadingInfoView.isHidden = true
-            
+        dataService.fetchData { [weak self] response in
             DispatchQueue.main.async {
-                if success {
+                self?.downloadingInfoView.isHidden = true
+                
+                switch response {
+                case .success:
                     self?.closeController()
-                } else {
-                    self?.showAlert()
+                case .failure(let error):
+                    self?.showAlert(message: error.rawValue)
                 }
             }
         }
     }
     
     private func closeController() {
+        
+        print(dataService.data.count)
+        
         UIView.animate(withDuration: 1) {
             self.titleView.alpha = 0
         } completion: { _ in
@@ -53,10 +57,13 @@ final class SplashScreenViewController: UIViewController {
         }
     }
     
-    private func showAlert() {
-        delegate?.showAlert(withMessage: "Data dwonloading problem!", errorHandler: { [weak self] in
-            self?.downloadingInfoView.isHidden = false
-            self?.fetchData()
-        })
+    private func showAlert(message: String) {
+        delegate?.showAlert(
+            title: "Data dwonloading problem!",
+            message: message,
+            errorHandler: { [weak self] in
+                self?.downloadingInfoView.isHidden = false
+                self?.fetchData()
+            })
     }
 }

@@ -13,7 +13,7 @@ protocol Coordinator {
 
 protocol RootCoordinatorDelegate: AnyObject {
     func hideSplashScreen()
-    func showAlert(withMessage message: String, errorHandler: @escaping () -> ())
+    func showAlert(title: String, message: String, errorHandler: @escaping () -> ())
 }
 
 final class RootCoordinator: NSObject, Coordinator {
@@ -57,9 +57,10 @@ final class RootCoordinator: NSObject, Coordinator {
 extension RootCoordinator: RootCoordinatorDelegate {
     func hideSplashScreen() {
         showMainScreen()
+        splashScreenViewController = nil
     }
     
-    func showAlert(withMessage message: String, errorHandler: @escaping () -> ()) {
+    func showAlert(title: String, message: String, errorHandler: @escaping () -> ()) {
         let errorAction = UIAlertAction(
             title: "Try again",
             style: .default) { _ in
@@ -67,7 +68,7 @@ extension RootCoordinator: RootCoordinatorDelegate {
         }
         
         let alerController = UIAlertController(
-            title: nil,
+            title: title,
             message: message,
             preferredStyle: .alert)
         
