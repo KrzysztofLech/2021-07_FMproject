@@ -20,7 +20,8 @@ struct DataViewModel {
     }
     
     var description: String {
-        return data.description
+        let textArray = data.description.components(separatedBy: "http")
+        return textArray.first ?? ""
     }
     
     var modificationDate: String {
