@@ -9,11 +9,17 @@ import UIKit
 
 final class SplashScreenViewController: UIViewController {
 
+    // MARK: - Outlets -
+    
     @IBOutlet private var titleView: UIView!
     @IBOutlet private var downloadingInfoView: UIView!
     
+    // MARK: - Private properies -
+    
     private weak var delegate: RootCoordinatorDelegate?
     private let dataService: DataServiceProtocol
+    
+    // MARK: - Lifecycle -
     
     init(dataService: DataServiceProtocol, delegate: RootCoordinatorDelegate) {
         self.dataService = dataService
@@ -31,6 +37,8 @@ final class SplashScreenViewController: UIViewController {
         fetchData()
     }
     
+    // MARK: - Data -
+    
     private func fetchData() {
         dataService.fetchData { [weak self] response in
             DispatchQueue.main.async {
@@ -46,10 +54,9 @@ final class SplashScreenViewController: UIViewController {
         }
     }
     
+    // MARK: - Actions -
+    
     private func closeController() {
-        
-        print(dataService.data.count)
-        
         UIView.animate(withDuration: 1) {
             self.titleView.alpha = 0
         } completion: { _ in

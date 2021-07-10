@@ -47,8 +47,9 @@ final class RootCoordinator: NSObject, Coordinator {
     }
     
     private func showMainScreen() {
-        let mainViewController = MainViewController()
-        window?.rootViewController = mainViewController
+        let mainPageViewModel = MainPageViewModel(dataService: dataService)
+        let mainPageViewController = MainPageViewController(viewModel: mainPageViewModel)
+        window?.rootViewController = mainPageViewController
     }
 }
 
