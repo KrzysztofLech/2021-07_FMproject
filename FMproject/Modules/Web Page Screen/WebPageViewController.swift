@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WebKit
 
 final class WebPageViewController: UIViewController {
 
@@ -31,13 +32,35 @@ final class WebPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setup()
+        loadPage()
     }
-    
+        
     // MARK: - Setup -
     
     private func setup() {
         navigationController?.navigationBar.tintColor = .gray
         title = String(pageUrl.components(separatedBy: "//").last?.dropLast() ?? "")
+        contentView.webView.navigationDelegate = self
+    }
+    
+    // MARK: - Web link methods -
+    
+    private func loadPage() {
+        guard let url = URL(string: pageUrl) else { return }
+        
+        let request = URLRequest(url: url)
+        contentView.webView.load(request)
+    }
+}
+
+extension WebPageViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        contentView.isPageDownloading = false
+    }
+        
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        contentView.isPageDownloading = false
     }
 }

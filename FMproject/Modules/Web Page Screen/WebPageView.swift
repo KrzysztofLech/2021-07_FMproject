@@ -6,10 +6,27 @@
 //
 
 import UIKit
+import SnapKit
+import WebKit
 
 final class WebPageView: UIView {
     
+    var isPageDownloading: Bool = false {
+        willSet {
+            newValue ? activityIndicatorView.startAnimating() : activityIndicatorView.stopAnimating()
+        }
+    }
+    
     // MARK: - UI Components -
+    
+    private var activityIndicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .large)
+        view.hidesWhenStopped = true
+        view.tintColor = .red
+        return view
+    }()
+    
+    let webView = WKWebView()
     
     // MARK: - Init -
     
@@ -27,12 +44,21 @@ final class WebPageView: UIView {
     // MARK: - Setup -
     
     private func setup() {
-        backgroundColor = .green
+        backgroundColor = .white
+        isPageDownloading = true
     }
     
     // MARK: - Layout -
     
     private func defineLayout() {
+        addSubview(webView)
+        webView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
+        addSubview(activityIndicatorView)
+        activityIndicatorView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
     }
 }
