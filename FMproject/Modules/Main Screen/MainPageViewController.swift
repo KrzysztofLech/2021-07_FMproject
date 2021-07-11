@@ -16,6 +16,7 @@ final class MainPageViewController: UIViewController {
     // MARK: - Private properies -
 
     private let viewModel: MainPageViewModel
+    private let refreshControl = UIRefreshControl()
     
     // MARK: - Lifecycle -
     
@@ -38,6 +39,25 @@ final class MainPageViewController: UIViewController {
     
     private func setup() {
         tableView.register(cellAndNibName: ItemTableViewCell.className)
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(refreshControlAction), for: .valueChanged)
+    }
+    
+    @objc private func refreshControlAction() {
+        viewModel.fetchData { [weak self] in
+            self?.refreshControl.endRefreshing()
+            self?.showNewContent()
+        }
+    }
+    
+    private func showNewContent() {
+        tableView.reloadData()
+        guard !viewModel.data.isEmpty else { return }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            let indexPath = IndexPath(row: 0, section: 0)
+            self?.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        }
     }
 }
 

@@ -20,4 +20,12 @@ final class MainPageViewModel {
             .sorted { $0.orderId < $01.orderId }
             .map { DataViewModel(data: $0) }
     }
+    
+    func fetchData(completion: @escaping () -> ()) {
+        dataService.fetchData { _ in
+            DispatchQueue.main.async {
+                completion()
+            }
+        }
+    }
 }
