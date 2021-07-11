@@ -57,7 +57,7 @@ final class MainPageViewController: UIViewController {
         let refreshControlTitle = "Data downloading ..."
         let attributes = [
             NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
-            NSAttributedString.Key.foregroundColor: UIColor.gray
+            NSAttributedString.Key.foregroundColor: UIColor.black
         ]
         refreshControl.attributedTitle = NSAttributedString(string: refreshControlTitle, attributes: attributes)
         
