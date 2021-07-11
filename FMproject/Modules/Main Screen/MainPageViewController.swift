@@ -33,31 +33,47 @@ final class MainPageViewController: UIViewController {
         super.viewDidLoad()
         
         setup()
+        addRefreshControl()
     }
     
     // MARK: - Setup -
     
     private func setup() {
+        title = "Data list"
+        
         tableView.register(cellAndNibName: ItemTableViewCell.className)
         tableView.contentInset.top = 16
-        tableView.refreshControl = refreshControl
+    }
+    
+    // MARK: - Refreshing data -
+    
+    private func addRefreshControl() {
         refreshControl.addTarget(self, action: #selector(refreshControlAction), for: .valueChanged)
-        title = "Data list"
+
+        let refreshControlTitle = "Data downloading ..."
+        let attributes = [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14),
+            NSAttributedString.Key.foregroundColor: UIColor.gray
+        ]
+        refreshControl.attributedTitle = NSAttributedString(string: refreshControlTitle, attributes: attributes)
+        
+        tableView.refreshControl = refreshControl
     }
     
     @objc private func refreshControlAction() {
-        viewModel.fetchData { [weak self] in
-            self?.refreshControl.endRefreshing()
-            self?.showNewContent()
-        }
+        refreshData()
     }
     
-    private func showNewContent() {
-        tableView.reloadData()
-        guard !viewModel.data.isEmpty else { return }
+    private func refreshData() {
+        tableView.isUserInteractionEnabled = false
+        tableView.alpha = 0.4
         
-            let indexPath = IndexPath(row: 0, section: 0)
-            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        viewModel.fetchData { [weak self] in
+            self?.refreshControl.endRefreshing()
+            self?.tableView.reloadData()
+            self?.tableView.isUserInteractionEnabled = true
+            self?.tableView.alpha = 1.0
+        }
     }
 }
 
