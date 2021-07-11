@@ -14,7 +14,7 @@ final class SplashScreenViewController: UIViewController {
     @IBOutlet private var titleView: UIView!
     @IBOutlet private var downloadingInfoView: UIView!
     
-    // MARK: - Private properies -
+    // MARK: - Private properties -
     
     private weak var delegate: RootCoordinatorDelegate?
     private let dataService: DataServiceProtocol

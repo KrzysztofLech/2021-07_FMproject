@@ -13,7 +13,7 @@ final class MainPageViewController: UIViewController {
     
     @IBOutlet private var tableView: UITableView!
     
-    // MARK: - Private properies -
+    // MARK: - Private properties -
 
     private let viewModel: MainPageViewModel
     private weak var delegate: RootCoordinatorDelegate?

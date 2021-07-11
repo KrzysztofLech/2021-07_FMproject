@@ -10,7 +10,7 @@ import WebKit
 
 final class WebPageViewController: UIViewController {
 
-    // MARK: - Private properies -
+    // MARK: - Private properties -
     
     private let pageUrl: String
     private weak var delegate: RootCoordinatorDelegate?
