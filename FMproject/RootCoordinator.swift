@@ -15,6 +15,7 @@ protocol RootCoordinatorDelegate: AnyObject {
     func hideSplashScreen()
     func showAlert(title: String, message: String, errorHandler: @escaping () -> ())
     func didTapOnItem(withUrl url: String)
+    func hideWebPage()
 }
 
 final class RootCoordinator: NSObject, Coordinator {
@@ -58,7 +59,9 @@ final class RootCoordinator: NSObject, Coordinator {
     }
     
     private func showWebPage(withUrl url: String) {
-        let webPageViewController = WebPageViewController(pageUrl: url)
+        let webPageViewController = WebPageViewController(
+            pageUrl: url,
+            delegate: self)
         navigationController?.pushViewController(webPageViewController, animated: true)
     }
 }
@@ -84,10 +87,19 @@ extension RootCoordinator: RootCoordinatorDelegate {
             preferredStyle: .alert)
         
         alerController.addAction(errorAction)
-        splashScreenViewController?.present(alerController, animated: true)
+        
+        if splashScreenViewController != nil {
+            splashScreenViewController?.present(alerController, animated: true)
+        } else {
+            navigationController?.present(alerController, animated: true)
+        }
     }
     
     func didTapOnItem(withUrl url: String) {
         showWebPage(withUrl: url)
+    }
+    
+    func hideWebPage() {
+        navigationController?.popToRootViewController(animated: true)
     }
 }

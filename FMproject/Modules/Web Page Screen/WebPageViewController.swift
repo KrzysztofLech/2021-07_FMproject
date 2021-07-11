@@ -13,12 +13,14 @@ final class WebPageViewController: UIViewController {
     // MARK: - Private properies -
     
     private let pageUrl: String
+    private weak var delegate: RootCoordinatorDelegate?
     private let contentView = WebPageView()
     
     // MARK: - Lifecycle -
         
-    init(pageUrl: String) {
+    init(pageUrl: String, delegate: RootCoordinatorDelegate) {
         self.pageUrl = pageUrl
+        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -62,5 +64,11 @@ extension WebPageViewController: WKNavigationDelegate {
         
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         contentView.isPageDownloading = false
+        delegate?.showAlert(
+            title: "Page downloading problem!",
+            message: "Please select another page",
+            errorHandler: { [weak self] in
+                self?.delegate?.hideWebPage()
+            })
     }
 }
