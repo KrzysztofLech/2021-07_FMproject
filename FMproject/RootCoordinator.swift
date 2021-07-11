@@ -14,6 +14,7 @@ protocol Coordinator {
 protocol RootCoordinatorDelegate: AnyObject {
     func hideSplashScreen()
     func showAlert(title: String, message: String, errorHandler: @escaping () -> ())
+    func didTapOnItem(withUrl url: String)
 }
 
 final class RootCoordinator: NSObject, Coordinator {
@@ -49,9 +50,16 @@ final class RootCoordinator: NSObject, Coordinator {
     
     private func showMainScreen() {
         let mainPageViewModel = MainPageViewModel(dataService: dataService)
-        let mainPageViewController = MainPageViewController(viewModel: mainPageViewModel)
+        let mainPageViewController = MainPageViewController(
+            viewModel: mainPageViewModel,
+            delegate: self)
         navigationController = UINavigationController(rootViewController: mainPageViewController)
         window?.rootViewController = navigationController
+    }
+    
+    private func showWebPage(withUrl url: String) {
+        let webPageViewController = WebPageViewController(pageUrl: url)
+        navigationController?.pushViewController(webPageViewController, animated: true)
     }
 }
 
@@ -77,5 +85,9 @@ extension RootCoordinator: RootCoordinatorDelegate {
         
         alerController.addAction(errorAction)
         splashScreenViewController?.present(alerController, animated: true)
+    }
+    
+    func didTapOnItem(withUrl url: String) {
+        showWebPage(withUrl: url)
     }
 }

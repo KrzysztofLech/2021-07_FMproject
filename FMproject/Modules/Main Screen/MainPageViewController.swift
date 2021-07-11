@@ -16,12 +16,15 @@ final class MainPageViewController: UIViewController {
     // MARK: - Private properies -
 
     private let viewModel: MainPageViewModel
+    private weak var delegate: RootCoordinatorDelegate?
     private let refreshControl = UIRefreshControl()
     
     // MARK: - Lifecycle -
     
-    init(viewModel: MainPageViewModel) {
+    init(viewModel: MainPageViewModel, delegate: RootCoordinatorDelegate) {
         self.viewModel = viewModel
+        self.delegate = delegate
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -40,6 +43,7 @@ final class MainPageViewController: UIViewController {
     
     private func setup() {
         title = "Data list"
+        navigationItem.backButtonDisplayMode = .minimal
         
         tableView.register(cellAndNibName: ItemTableViewCell.className)
         tableView.contentInset.top = 16
@@ -88,5 +92,14 @@ extension MainPageViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ItemTableViewCell.className, for: indexPath) as? ItemTableViewCell else { return UITableViewCell() }
         cell.configure(withData: viewModel.data[indexPath.row])
         return cell
+    }
+}
+
+// MARK: - TableView Delegate -
+
+extension MainPageViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let pageUrl = viewModel.data[indexPath.row].pageUrl
+        delegate?.didTapOnItem(withUrl: pageUrl)
     }
 }
