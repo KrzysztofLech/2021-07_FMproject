@@ -20,8 +20,8 @@ struct DataViewModel {
     }
     
     var description: String {
-        let textArray = data.description.components(separatedBy: "http")
-        return textArray.first ?? ""
+        let textComponents = data.description.components(separatedBy: "http")
+        return textComponents.first ?? ""
     }
     
     var modificationDate: String {
@@ -30,5 +30,9 @@ struct DataViewModel {
 
     var imageUrl: String {
         return data.imageUrl
+    }
+    
+    var pageUrl: String {
+        return String(data.description.dropFirst(description.count))
     }
 }
