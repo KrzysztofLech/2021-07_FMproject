@@ -39,8 +39,10 @@ final class MainPageViewController: UIViewController {
     
     private func setup() {
         tableView.register(cellAndNibName: ItemTableViewCell.className)
+        tableView.contentInset.top = 16
         tableView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(refreshControlAction), for: .valueChanged)
+        title = "Data list"
     }
     
     @objc private func refreshControlAction() {
@@ -54,10 +56,8 @@ final class MainPageViewController: UIViewController {
         tableView.reloadData()
         guard !viewModel.data.isEmpty else { return }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             let indexPath = IndexPath(row: 0, section: 0)
-            self?.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-        }
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
 }
 

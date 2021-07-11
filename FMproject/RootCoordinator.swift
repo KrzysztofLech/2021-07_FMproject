@@ -22,6 +22,7 @@ final class RootCoordinator: NSObject, Coordinator {
     
     private var window: UIWindow?
     private var splashScreenViewController: SplashScreenViewController?
+    private var navigationController: UINavigationController?
     
     private let dataService: DataServiceProtocol
         
@@ -49,7 +50,8 @@ final class RootCoordinator: NSObject, Coordinator {
     private func showMainScreen() {
         let mainPageViewModel = MainPageViewModel(dataService: dataService)
         let mainPageViewController = MainPageViewController(viewModel: mainPageViewModel)
-        window?.rootViewController = mainPageViewController
+        navigationController = UINavigationController(rootViewController: mainPageViewController)
+        window?.rootViewController = navigationController
     }
 }
 
